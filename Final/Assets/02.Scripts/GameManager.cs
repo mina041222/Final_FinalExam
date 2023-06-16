@@ -8,7 +8,8 @@ public class GameManager : MonoBehaviour
 
     [Header("계단")]
     [Space(10)]                             //Space를 이용해서 10정도 거리 떨어 뜨리기
-    public GameObject[] stairs;             //Stairs라는 변수 선언
+    public GameObject[] Stairs;             //Stairs라는 변수 선언
+    public bool[] isTurn;                    //배열 만들어주기 위해 isTurn 변수 이름 작성
 
     private enum State {Start, Left, Right}; //게임 내의 설정을 만들기
     private State state;                     //state라는 변수 선언
@@ -28,35 +29,85 @@ public class GameManager : MonoBehaviour
     {
         state = State.Start;
         oldPosition = Vector3.zero;          //start 값을 0으로 초기화한다
+
+        isTurn = new bool[Stairs.Length];    //stairs의 배열의 길이 만큼 초기화 해준다
+
+        for(int i = 0; i < Stairs.Length; i++)     //계단의 배열의 길이만큼 돌아준다
+        {
+            Stairs[i].transform.position = Vector3.zero;    //계단의 위치값을 0으로 초기화 해준다
+            isTurn[i] = false;
+        }
     }
+
     //처음 시작시 계단을 초기화 하기 위함
     private void InitStairs()
     {
         for (int i = 0; i < Stairs.Length; i++)
         {
-            switch(State)
+            switch(state)
             {
                 case State.Start:
-                {
+
                     Stairs[i].transform.position = new Vector3(0.75f, -0.1f, 0);  //첫번째 시작할경우에 계단의 위치값을 Vector3로 정함 
-                    state State.Right;            //주인공이 오른쪽으로 가야하기 때문에 state에 right값을 더한다
+                    state = State.Right;            //주인공이 오른쪽으로 가야하기 때문에 state에 right값을 더한다
                     break;
-                }
+                
 
                 case State.Left:
-                {
-                    Stairs[i].transform.position = oldPosition + new Vector3(-0.75f, -0.5f, 0); //계단 1칸을 가야하기 때문에 0.1f을 0.5f로 바꿔준다
+
+                    Stairs[i].transform.position = oldPosition + new Vector3(-0.75f, 0.5f, 0); //계단 1칸을 가야하기 때문에 0.1f을 0.5f로 바꿔준다
+                    isTurn[i] = true;              //왼쪽일때 isTurn은 true로 오른쪽일때 isTurn은 false로 작성
                     break;
-                }
+
 
                 case State.Right:
-                {
-                    Stairs[i].transform.position = oldPosition + new Vector3(0.75f, -0.5f, 0);  //oldPosition(원래 위치값)에 vector3값을 더해준다
-                    break;
-                }
 
-                oldPosition = Stairs[i].transform.position;                     //switch문이 끝날 시 실행
+                    Stairs[i].transform.position = oldPosition + new Vector3(0.75f, 0.5f, 0);  //oldPosition(원래 위치값)에 vector3값을 더해준다
+                    isTurn[i] = false;
+                    break;
+
+            }
+            oldPosition = Stairs[i].transform.position;                     //switch문이 끝날 시 실행
+
+            if(i != 0)
+            {
+                int ran = Random.Range(0,5);         //5개중 랜덤으로 한개의 값을 지역변수로 대입
+
+                //2보다 작은 값이 오면 조건이 성립
+                if(ran < 2 && i < Stairs.Length - 1)       // i 값이 계단의 배열보다 1작게 함 (배열의 길이가 20 이지만 i값은 0부터 19까지이기 때문에)
+                {
+                    state = state == State.Left? State.Right : State.Left; //저건에 들어오게 되면 state값이 왼쪽이면 왼쪽, 오른쪽이면 오른쪽으로 되게 작성
+                }
             }
         }
+    }
+
+    //계단이 생성될때 InitStairs 생성
+    public void SpawnStair(int cnt) 
+    {
+         int ran = Random.Range(0,5);       //렌덤으로 추가적인 계단을 생성해야한다
+
+         if(ran < 2)
+         {
+             state = state == State.Left? State.Right : State.Left;
+         }
+
+         switch(state)
+         {
+             case State.Left:
+             
+                 Stairs[cnt].transform.position = oldPosition + new Vector3(-0.75f, 0.5f, 0);
+                 isTurn[cnt] = true;
+                 break;
+             
+             case State.Right:
+             {
+                 Stairs[cnt].transform.position = oldPosition + new Vector3(0.75f, 0.5f, 0);
+                 isTurn[cnt] = false;
+                 break;
+             }
+
+         }
+         oldPosition = Stairs[cnt].transform.position;
     }
 }
