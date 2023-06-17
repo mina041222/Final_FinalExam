@@ -25,6 +25,11 @@ public class GameManager : MonoBehaviour
     private int maxScore = 0;          //점수를 등록하고 표시 하기 위해 int선언하고 초기화
     private int nowScore = 0;
 
+    [Header("Audio")]
+    [Space(10)]
+    private AudioSource sound;
+    public AudioClip bgmSound;
+    public AudioClip dieSound;
 
 
 
@@ -32,8 +37,12 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Instance = this;                    //Instance를 자기 자신으로 대입시키기
+
+        sound = GetComponent<AudioSource>();
+
         Init();                             //Init함수로 이동
         InitStairs();
+
     }
 
     public void Init()
@@ -54,6 +63,10 @@ public class GameManager : MonoBehaviour
         textShowScore.text = nowScore.ToString();     //보이는 점수를 ToString(문자열로 표기
 
         UI_GameOver.SetActive(false);
+
+        sound.clip = bgmSound;
+        sound.Play();
+        sound.loop = true;   //반복해서 재생 되게 함
 
     }
 
@@ -131,6 +144,11 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
+        sound.loop = false;
+        sound.Stop();
+        sound.clip = dieSound;
+        sound.Play();
+
         StartCoroutine(ShowGameOver());
     }
 

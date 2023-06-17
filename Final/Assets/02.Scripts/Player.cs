@@ -16,12 +16,15 @@ public class Player : MonoBehaviour
 
     private bool isDie = false; 
 
+    private AudioSource sound;
+
     // Start is called before the first frame update
     void Start()
     {
-        anim = GetComponent<Animator>();        //anim에 GetComponenet를 이용해 Animator을 받아온다
+        anim = GetComponent<Animator>();        //anim에 GetComponeet를 이용해 Animator을 받아온다
         spriteRenderer = GetComponent<SpriteRenderer>();    //spriteRendere에 SpriteRenderer 정보를 받아온다
         startPosition = transform.position;                 //스타트 함수에 스타트 포지션 값에 시작시킬 위치 대입
+        sound = GetComponent<AudioSource>();
 
         Init();
 
@@ -66,6 +69,9 @@ public class Player : MonoBehaviour
         {
             return; 
         }
+       
+        sound.Play();
+
         moveCnt++;               //캐릭터 move함수가 호출 될때마다 moveCnt는 증가 시켜준다
         MoveDirection();
 
@@ -97,6 +103,7 @@ public class Player : MonoBehaviour
 
         transform.position = oldPosition;
         anim.SetTrigger("Move");             //실행될시 애니메이션 발생
+
     }
 
     private bool isFailTurn()
