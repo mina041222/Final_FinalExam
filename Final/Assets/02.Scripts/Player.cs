@@ -14,13 +14,16 @@ public class Player : MonoBehaviour
     private int turnCnt = 0;               //turnCount 0으로 초기화
     private int spawnCnt = 0;              //spawnCount 0으로 초기화 
 
+    private bool isDie = false; 
+
     // Start is called before the first frame update
     void Start()
     {
         anim = GetComponent<Animator>();        //anim에 GetComponenet를 이용해 Animator을 받아온다
-        spriteRenderer = GetComponent<SpriteRenderer>();    //spriteRendere에 SpriteRenderer 정보를 받아온다 
-        startPosition = transform.position;            //스타트 함수에 스타트 포지션 값에 시작시킬 위치 대입
-        oldPosition = transform.localPosition;          //oldPosition에 로컬 값을 대입
+        spriteRenderer = GetComponent<SpriteRenderer>();    //spriteRendere에 SpriteRenderer 정보를 받아온다
+        startPosition = transform.position;                 //스타트 함수에 스타트 포지션 값에 시작시킬 위치 대입
+
+        Init();
 
     }
 
@@ -37,22 +40,38 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void CharTurn()
+    private void Init()
+    {
+        anim.SetBool("Die",false);
+        transform.position = startPosition;     // 케릭터 위치에 startPosition 값을  대입
+        oldPosition = startPosition;            //oldPosition에 startposition 값을 대입
+        moveCnt = 0;
+        spawnCnt = 0;
+        turnCnt = 0;
+        isTurn = false;
+        spriteRenderer.flipX = isTurn;
+        isDie = false;
+    }
+
+    public void CharTurn()
     {
         isTurn = isTurn == true? false : true;   //isTurn이 ture면 false로 번경하고 false면 true로 번경하도록 한다 
 
         spriteRenderer.flipX = isTurn;          //spriteRenderer의 filpX에 isTrue를 대입한다
     }
 
-    private void CharMove()
+    public void CharMove()
     {
+        if(isDie)     //isDie가 true라면 return을 이용해서 빠져나가기 
+        {
+            return; 
+        }
         moveCnt++;               //캐릭터 move함수가 호출 될때마다 moveCnt는 증가 시켜준다
         MoveDirection();
 
         if(isFailTurn())         //잘못된 방향으로가면 사망
         {
-            anim.SetBool("Die",true);
-            Debug.Log("죽었다!");
+            CharDie();
             return;              //함수를 빠져나가게 하는것 
         }
 
@@ -60,6 +79,8 @@ public class Player : MonoBehaviour
         {
             RespawnStair();
         }
+
+        GameManager.Instance.AddScore();
     }
 
     private void MoveDirection()          //방향에 대한 함수 작성
@@ -109,5 +130,20 @@ public class Player : MonoBehaviour
         {
             spawnCnt = 0;
         }
+    }
+
+    private void CharDie()
+    {
+        GameManager.Instance.GameOver();     //게임 오버 함수 호출
+        anim.SetBool("Die",true);
+        isDie = true;
+    }
+
+    //버튼 Restart를 누르면 다시 시작
+    public void ButtonRestart()
+    {
+        Init();
+        GameManager.Instance.Init();
+        GameManager.Instance.InitStairs();
     }
 }

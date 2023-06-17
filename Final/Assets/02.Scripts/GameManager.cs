@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro; 
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +16,16 @@ public class GameManager : MonoBehaviour
     private State state;                     //state라는 변수 선언
     private Vector3 oldPosition;              //Vector3에 위치값을 넣어 대입
 
+    [Header("UI")]
+    [Space(10)]         //10만큼 간격 있게 하기
+    public GameObject UI_GameOver;   //게임 오버창을 시작할수 끌수 있게 GameObject로 작성
+    public TextMeshProUGUI textNowScore;
+    public TextMeshProUGUI textMaxScore;
+    public TextMeshProUGUI textShowScore;
+    private int maxScore = 0;          //점수를 등록하고 표시 하기 위해 int선언하고 초기화
+    private int nowScore = 0;
+
+
 
 
     // Start is called before the first frame update
@@ -25,7 +36,7 @@ public class GameManager : MonoBehaviour
         InitStairs();
     }
 
-    private void Init()
+    public void Init()
     {
         state = State.Start;
         oldPosition = Vector3.zero;          //start 값을 0으로 초기화한다
@@ -37,10 +48,17 @@ public class GameManager : MonoBehaviour
             Stairs[i].transform.position = Vector3.zero;    //계단의 위치값을 0으로 초기화 해준다
             isTurn[i] = false;
         }
+
+        nowScore = 0;           //NowScore을 0으로 초기화 해준다
+
+        textShowScore.text = nowScore.ToString();     //보이는 점수를 ToString(문자열로 표기
+
+        UI_GameOver.SetActive(false);
+
     }
 
     //처음 시작시 계단을 초기화 하기 위함
-    private void InitStairs()
+    public void InitStairs()
     {
         for (int i = 0; i < Stairs.Length; i++)
         {
@@ -110,4 +128,33 @@ public class GameManager : MonoBehaviour
          }
          oldPosition = Stairs[cnt].transform.position;
     }
+
+    public void GameOver()
+    {
+        StartCoroutine(ShowGameOver());
+    }
+
+    IEnumerator ShowGameOver()     //코루틴을 사용하기 위해 사용
+    {
+        yield return new WaitForSeconds(1f);
+
+        UI_GameOver.SetActive(true);
+
+        if(nowScore > maxScore)     //MaxScore 설정
+        {
+            maxScore = nowScore;
+        }
+
+        textMaxScore.text = maxScore.ToString();
+        textNowScore.text = nowScore.ToString();
+
+    }
+
+    public void AddScore()     //계단을 오를때마다 점수 추가
+    {
+        nowScore++;
+        textShowScore.text = nowScore.ToString();
+
+    }
+
 }
