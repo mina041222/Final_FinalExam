@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro; 
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -30,6 +31,8 @@ public class GameManager : MonoBehaviour
     private AudioSource sound;
     public AudioClip bgmSound;
     public AudioClip dieSound;
+
+    public string sceneName = "Main";       //Main씬으로 복구
 
 
 
@@ -175,4 +178,9 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public void ClickMain()
+    {
+        Debug.Log("메인으로 가즈아!");
+        SceneManager.LoadScene(sceneName);       //main으로 가게 해줌
+    }
 }
