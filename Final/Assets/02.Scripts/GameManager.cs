@@ -36,6 +36,8 @@ public class GameManager : MonoBehaviour
 
 
 
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -47,6 +49,8 @@ public class GameManager : MonoBehaviour
         InitStairs();
 
     }
+
+
 
     public void Init()
     {
@@ -153,6 +157,7 @@ public class GameManager : MonoBehaviour
         sound.Play();
 
         StartCoroutine(ShowGameOver());
+
     }
 
     IEnumerator ShowGameOver()     //코루틴을 사용하기 위해 사용
@@ -168,6 +173,7 @@ public class GameManager : MonoBehaviour
 
         textMaxScore.text = maxScore.ToString();
         textNowScore.text = nowScore.ToString();
+
 
     }
 
