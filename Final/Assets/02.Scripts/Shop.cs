@@ -8,6 +8,6 @@ public class Shop : MonoBehaviour
 
 	public void GoGameScene()
 	{
-		SceneManager.LoadScene(1);
+		SceneManager.LoadScene(0);
 	}
 }
