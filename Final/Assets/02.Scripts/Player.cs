@@ -31,17 +31,18 @@ public class Player : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update() 
-    {
-        if(Input.GetMouseButtonDown(0))
-        {
-            CharTurn();       //캐릭터 돌기 작성
-        }
-        else if(Input.GetKeyDown(KeyCode.Space))     
-        {
-            CharMove();       //캐릭터 움직임 작성
-        }
-    }
+    //void Update() 
+    //{
+        //if(Input.GetMouseButtonDown(0))
+        //{
+            //CharTurn();       //캐릭터 돌기 작성
+        //}
+
+        //else if(Input.GetKeyDown(KeyCode.Space))
+        //{
+            //CharMove();       //캐릭터 움직임 작성
+        //}
+    //}
 
     private void Init()
     {

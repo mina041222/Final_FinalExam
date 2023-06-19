@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Title : MonoBehaviour
 {
-    public string sceneName = "Game";                 //다음 씬으로 넘어가는 변수 선언
+    public string sceneName = "Game";                 //다음 씬으로 넘어가는 변수 선언 
 
     public void ClickStart()
     {
@@ -16,6 +16,7 @@ public class Title : MonoBehaviour
     public void ClickShop()
     {
         Debug.Log("상점");
+        SceneManager.LoadScene(2);
     }
 
     public void ClickExit()

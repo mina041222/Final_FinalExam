@@ -34,12 +34,8 @@ public class GameManager : MonoBehaviour
 
     public string sceneName = "Main";       //Main씬으로 복구
 
-
-
-
-
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         Instance = this;                    //Instance를 자기 자신으로 대입시키기
 
@@ -148,6 +144,7 @@ public class GameManager : MonoBehaviour
          }
          oldPosition = Stairs[cnt].transform.position;
     }
+
 
     public void GameOver()
     {
